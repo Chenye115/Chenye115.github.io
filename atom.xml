@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="chenye2000.top/"/>
-  <updated>2020-04-09T02:52:20.944Z</updated>
+  <updated>2020-03-22T03:36:49.208Z</updated>
   <id>chenye2000.top/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Chapter 5 Thread</title>
-    <link href="chenye2000.top/2020/04/09/Chapter%205%20Thread/"/>
-    <id>chenye2000.top/2020/04/09/Chapter%205%20Thread/</id>
-    <published>2020-04-09T02:37:28.585Z</published>
-    <updated>2020-04-09T02:52:20.944Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/104834649&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 1: Introduction&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/104836492&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 2: Computer-System Structures&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/104846186&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 3: Operating-System Structures&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/105397752&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 4: Process&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/105404697&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 5: Thread&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&quot;Chapter-5-Thread&quot;&gt;&lt;a href=&quot;#Chapter-5-Thread&quot; class=&quot;headerlink&quot; title=&quot;Chapter 5 Thread&quot;&gt;&lt;/a&gt;Chapter 5 Thread&lt;/h1&gt;&lt;p&gt;What is a thread?–A thread, also known as lightweight process (LWP),&lt;strong&gt;is a basic unit of CPU execution.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;A thread has a thread ID, a program counter, a register set, and a stack–similar to a process&lt;/p&gt;
-&lt;p&gt;*&lt;em&gt;However, a thread shares with other threads in the same process its code section, data section, and other OS resources (e.g., files and signals). *&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../images/c51.png&quot; alt=&quot;1586356695921&quot;&gt;&lt;/p&gt;
-&lt;p&gt;同一个进程的多个线程共享该进程的其他资源（不包括CPU、寄存器、栈）&lt;/p&gt;
-&lt;p&gt;Linux中不存在线程进程的概念，同一称作task&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;图片无法加载请跳转至csdn&lt;/code&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-    
-  </entry>
   
   <entry>
     <title>Java多线程</title>
@@ -68,7 +44,7 @@
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;线程和进程的区别：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../images/5.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/5.jpg&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     
@@ -94,7 +70,7 @@
 &lt;p&gt;6.HTML标签可以嵌套，但是不能交叉嵌套&lt;/p&gt;
 &lt;p&gt;7.使用内联框架&lt;strong&gt;&lt;em&gt;iframe&lt;/em&gt;&lt;/strong&gt;可以引入一个外部的页面  使用iftrame来创建一个内联框架 &lt;/p&gt;
 &lt;p&gt;现实开发中不推荐使用内联框架，内联框架中的内容不会被搜索引擎所检索&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../images/code.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/code.jpg&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     
@@ -119,7 +95,7 @@
 &lt;p&gt;2018年12月31日，南京，“到了大学，反倒写日记的时间少了。”“一个人来到这个学校，每一天都值得铭记。”2019年1月1日。“想在跨年晚会前把日记写完，但高估了思维转化为文字落在纸面上的时间了。”“放手去追求，放手爱自由。”“ ”即使倒下，也要朝着未名湖的方向” 。”“已经走远了，也许会回来，也许不会。我不想停留在这种记忆里了。”“2019，向往自由。”&lt;/p&gt;
 &lt;p&gt;2019年12月31日，说来就来了。&lt;/p&gt;
 &lt;p&gt;（未完）&lt;/p&gt;
-&lt;p&gt; &lt;img src=&quot;../images/naruto.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt; &lt;img src=&quot;../images/naruto.jpg&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     
@@ -138,8 +114,8 @@
     
       &lt;p&gt;你好你好！&lt;/p&gt;
 &lt;p&gt;这是我第一次动手搭建自己的博客，希望能在这里把一些有趣的事情分享给大家。有的人可能觉得，程序员应该写技术博客呀，但是程序员也是有感情的，还有的程序员喜欢看书喜欢拉小提琴（虽然很久不练习了），也喜欢听音乐看电影之类的，并且很乐于把他们分享给大家。总之，我的地盘我做主，welcome to my world !&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;sakura.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;../images/sakura.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/21/hello-world/sakura.jpg&quot; alt&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/sakura.jpg&quot; alt&gt;&lt;/p&gt;
     
     </summary>
     

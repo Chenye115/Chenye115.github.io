@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="chenye2000.top/"/>
-  <updated>2020-03-22T03:36:49.208Z</updated>
+  <updated>2020-04-09T03:21:05.640Z</updated>
   <id>chenye2000.top/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Chapter 5 Thread</title>
+    <link href="chenye2000.top/2020/04/09/Chapter%205%20Thread/"/>
+    <id>chenye2000.top/2020/04/09/Chapter%205%20Thread/</id>
+    <published>2020-04-09T03:18:35.424Z</published>
+    <updated>2020-04-09T03:21:05.640Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/104834649&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 1: Introduction&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/104836492&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 2: Computer-System Structures&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/104846186&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 3: Operating-System Structures&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/105397752&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 4: Process&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://blog.csdn.net/qq_43721475/article/details/105404697&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;OS Review Chapter 5: Thread&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;Chapter-5-Thread&quot;&gt;&lt;a href=&quot;#Chapter-5-Thread&quot; class=&quot;headerlink&quot; title=&quot;Chapter 5 Thread&quot;&gt;&lt;/a&gt;Chapter 5 Thread&lt;/h1&gt;&lt;p&gt;What is a thread?–A thread, also known as lightweight process (LWP),&lt;strong&gt;is a basic unit of CPU execution.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;A thread has a thread ID, a program counter, a register set, and a stack–similar to a process&lt;/p&gt;
+&lt;p&gt;*&lt;em&gt;However, a thread shares with other threads in the same process its code section, data section, and other OS resources (e.g., files and signals). *&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/c51.png&quot; alt=&quot;1586356695921&quot;&gt;&lt;/p&gt;
+&lt;p&gt;同一个进程的多个线程共享该进程的其他资源（不包括CPU、寄存器、栈）&lt;/p&gt;
+&lt;p&gt;Linux中不存在线程进程的概念，同一称作task&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;图片无法加载请跳转至csdn&lt;/code&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Java多线程</title>

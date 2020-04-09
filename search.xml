@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Chapter 5 Thread</title>
+    <url>/2020/04/09/Chapter%205%20Thread/</url>
+    <content><![CDATA[<p><a href="https://blog.csdn.net/qq_43721475/article/details/104834649" target="_blank" rel="noopener">OS Review Chapter 1: Introduction</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/104836492" target="_blank" rel="noopener">OS Review Chapter 2: Computer-System Structures</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/104846186" target="_blank" rel="noopener">OS Review Chapter 3: Operating-System Structures</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/105397752" target="_blank" rel="noopener">OS Review Chapter 4: Process</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/105404697" target="_blank" rel="noopener">OS Review Chapter 5: Thread</a></p>
+<h1 id="Chapter-5-Thread"><a href="#Chapter-5-Thread" class="headerlink" title="Chapter 5 Thread"></a>Chapter 5 Thread</h1><p>What is a thread?–A thread, also known as lightweight process (LWP),<strong>is a basic unit of CPU execution.</strong></p>
+<p>A thread has a thread ID, a program counter, a register set, and a stack–similar to a process</p>
+<p>*<em>However, a thread shares with other threads in the same process its code section, data section, and other OS resources (e.g., files and signals). *</em></p>
+<p><img src="../images/c51.png" alt="1586356695921"></p>
+<p>同一个进程的多个线程共享该进程的其他资源（不包括CPU、寄存器、栈）</p>
+<p>Linux中不存在线程进程的概念，同一称作task</p>
+<p><code>图片无法加载请跳转至csdn</code></p>
+<a id="more"></a>
+
+<h2 id="Thread-Usage"><a href="#Thread-Usage" class="headerlink" title="Thread Usage"></a>Thread Usage</h2><p><img src="../images//c52.png" alt="1586357091134"></p>
+<h2 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h2><ul>
+<li>Responsiveness</li>
+<li>Resource Sharing (进程之间资源共享需要调用系统调用，需要频繁切换到kernel)</li>
+<li>Economy (创建时的开销)</li>
+<li>Utilization of MP(multi processors) Architectures</li>
+</ul>
+<h2 id="User-Threads"><a href="#User-Threads" class="headerlink" title="User Threads"></a>User Threads</h2><p>Thread management done by user-level threads library  –POSIX Pthreads </p>
+<p>用户线程阻塞会导致该进程的其他线程阻塞，kernel不知道process中的其他thread，认为这个process是阻塞的。 if one thread is blocked, every other threads of the same process are also blocked because the containing process is blocked.</p>
+<p>User threads are supported at the user level. The kernel is not aware of user threads. </p>
+<p>A library provides all support for thread creation, termination, joining, and scheduling. There is no kernel intervention, and, hence, user threads are usually more efficient. </p>
+<p><img src="../images//c53.png" alt="1586358017933"></p>
+<h2 id="Kernel-Threads"><a href="#Kernel-Threads" class="headerlink" title="Kernel Threads"></a>Kernel Threads</h2><p>Kernel threads are directly supported by the kernel. The kernel does thread creation,termination, joining, and scheduling in kernel space. </p>
+<p>Kernel threads are usually slower than the user threads.</p>
+<p>通常是用户创建一个kernel thread，导致kernel需要进行系统调用陷入内核，创建完成后返回用户态</p>
+<p>However, blocking one thread will not cause other threads of the same process to block. The kernel simply runs other threads. </p>
+<p><strong>In a multiprocessor environment, the kernel can schedule threads on different processors</strong></p>
+<h2 id="Multithreading-Models"><a href="#Multithreading-Models" class="headerlink" title="Multithreading Models"></a>Multithreading Models</h2><h3 id="Many-to-One"><a href="#Many-to-One" class="headerlink" title="Many-to-One"></a>Many-to-One</h3><p> 多对一模型：多个用户级线程线程映射到一个内核级线程。每个用户进程只对应一个内核级线程。<br>优点：用户级线程的切换在用户空间即可完成，不需要切换到核心态，线程管理的系统开销小，效率高。<br>缺点：当一个用户线程阻塞后，整个进程就会都阻塞，并发度不高。多个线程不可在多处理机上并行运行。 </p>
+<h3 id="One-to-One"><a href="#One-to-One" class="headerlink" title="One-to-One"></a>One-to-One</h3><p> 一个用户进程对应一个内核进程。每个用户有与内核进程相同数量的用户进程。<br>优点：当一个线程被阻塞后，另外的线程还可以继续执行，并发性强。多线程可在多核处理机上并发执行<br>缺点：一个用户线程会占用多个内核级线程，线程切换是需要将用户态转换为核心态，因此线程管理的成本高，开销大。 </p>
+<h3 id="Many-to-Many"><a href="#Many-to-Many" class="headerlink" title="Many-to-Many"></a>Many-to-Many</h3><p>Allows many user level threads to be mapped to many kernel threads. Allows the  operating system to create a sufficient number of kernel threads. </p>
+<p> 多对多模型：n个用户级线程映射到m个内核级线程（n&gt;=m）。每个用户进程对应m个内核级线程。<br>克服了多对一模型并发度不高的缺点，又克服了一对一模型中一个用户进程占用太多内核级线程，开销太大的缺点。 </p>
+<h2 id="Threading-Issues"><a href="#Threading-Issues" class="headerlink" title="Threading Issues"></a>Threading Issues</h2><p>Semantics of fork() and exec() system calls. ？？？</p>
+<h3 id="Thread-cancellation"><a href="#Thread-cancellation" class="headerlink" title="Thread cancellation."></a>Thread cancellation.</h3><ul>
+<li><strong>Asynchronous cancellation</strong> terminates the target thread  immediately （实现过程简单）</li>
+<li><strong>Deferred cancellation *<em>allows the target thread to periodically check if it should be cancelled ：The point a thread can terminate itself is a *</em>cancellation point</strong>（延迟，安全撤销）</li>
+</ul>
+<p>Pthread supports deferred cancellation.</p>
+<p>With asynchronous cancellation, if the target thread owns some system-wide resources, the system may not be able to reclaim all recourses. </p>
+<p>But for deferred cancellation,Reclaiming resources is not a problem.</p>
+<h2 id="Signal-Handling"><a href="#Signal-Handling" class="headerlink" title="Signal Handling"></a>Signal Handling</h2><h2 id="Thread-Pools"><a href="#Thread-Pools" class="headerlink" title="Thread Pools"></a>Thread Pools</h2><p>Create a number of threads in a pool where they await work .</p>
+<p>通常线程池中的线程数目是adaptive（自适应的）</p>
+<p>Advantages: </p>
+<p>◆Usually slightly faster to service a request with an existing thread than create a new thread </p>
+<p>◆Allows the number of threads in the application(s) to be bound to the size of the pool</p>
+<h3 id="Solaris-2-Threads"><a href="#Solaris-2-Threads" class="headerlink" title="Solaris 2 Threads"></a>Solaris 2 Threads</h3><p>M:M</p>
+<p><img src="../images//c54.png" alt="1586396393345"></p>
+<h2 id="Windows-XP-Threads"><a href="#Windows-XP-Threads" class="headerlink" title="Windows XP Threads"></a>Windows XP Threads</h2><p>Implements the one-to-one mapping. </p>
+<p>Each thread contains</p>
+<ul>
+<li>a thread id -</li>
+<li>register set </li>
+<li>separate user and kernel stacks </li>
+<li>private data storage area</li>
+</ul>
+<p><img src="../images//c55.png" alt="1586397994132"></p>
+<p>TEB: Thread Enviroment Block</p>
+<h2 id="Linux-Threads"><a href="#Linux-Threads" class="headerlink" title="Linux Threads"></a>Linux Threads</h2><p>linux中的进程已经十分高效，引入线程作为资源共享的一个手段</p>
+<p>Linux refers to them as tasks rather than threads.</p>
+<p>Thread creation is done through clone() system call. Clone() allows a child task to share the address space of the parent task (process)</p>
+<h2 id="Windows-Thread-APIs"><a href="#Windows-Thread-APIs" class="headerlink" title="Windows Thread APIs"></a>Windows Thread APIs</h2><ul>
+<li>CreateThread </li>
+<li>GetCurrentThreadId - returns global ID </li>
+<li>GetCurrentThread - returns handle </li>
+<li>SuspendThread/ResumeThread </li>
+<li>ExitThread </li>
+<li>TerminateThread </li>
+<li>GetExitCodeThread </li>
+<li>GetThreadTimes</li>
+</ul>
+<p>Example：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;synchapi.h&gt;</span></span></span><br><span class="line">BOOL thrdDone = FALSE;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function">DWORD WINAPI <span class="title">Fibonacci</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">int</span> n = a+b;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; i+<span class="number">1</span>&lt;&lt;<span class="string">" : "</span>&lt;&lt;a &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        a = b;</span><br><span class="line">        b = n;</span><br><span class="line">        n = a + n;</span><br><span class="line">    &#125;</span><br><span class="line">    thrdDone = TRUE;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="string">"enter the number of the Fibonacci:  "</span> &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    HANDLE hThread;</span><br><span class="line">    hThread = CreateThread(<span class="literal">NULL</span>, <span class="number">0</span>, (LPTHREAD_START_ROUTINE)Fibonacci, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">//getchar();</span></span><br><span class="line">    <span class="keyword">while</span> (!thrdDone);</span><br><span class="line">    DWORD dw=WaitForSingleObject( hThread, <span class="number">1000</span>);</span><br><span class="line">    <span class="comment">//cout &lt;&lt; dw;</span></span><br><span class="line">    <span class="comment">//std::cout &lt;&lt; "Hello World!\n";</span></span><br><span class="line">    system(<span class="string">"pause"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Example Explained: Main thread is process When process goes, all threads go Need some methods of waiting for a thread to finish</p>
+<h3 id="Threads-states"><a href="#Threads-states" class="headerlink" title="Threads states"></a>Threads states</h3><p>pthread threads have two states</p>
+<p> ◆joinable and detached </p>
+<p>threads are joinable by default </p>
+<p>◆Resources are kept until pthread_join </p>
+<p>◆can be reset with attribute or API call </p>
+<p>detached thread can not be joined </p>
+<p>◆resources can be reclaimed at termination </p>
+<p>◆cannot reset to be joinable</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_SEQUENCE 100</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//一组数据，用于创建线程时作为参数传入</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Data</span>&#123;</span></span><br><span class="line">     <span class="keyword">int</span> num; <span class="comment">//斐波那契数列的项数</span></span><br><span class="line">     <span class="keyword">int</span> Fibo[MAX_SEQUENCE];<span class="comment">//最大容量，斐波那契数列</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">Fibonacci</span><span class="params">(<span class="keyword">void</span> *data)</span></span>&#123;<span class="comment">//获得斐波那契数列</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Data</span> *<span class="title">tmp</span> = (<span class="title">struct</span> <span class="title">Data</span>*)<span class="title">data</span>;</span><span class="comment">//转化为实际类型</span></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(  tmp-&gt;num == <span class="number">0</span> )&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"error!enter a number larger than 0"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>( tmp-&gt;num == <span class="number">1</span> )&#123;</span><br><span class="line">        tmp-&gt;Fibo[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    tmp-&gt;Fibo[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    tmp-&gt;Fibo[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>( i=<span class="number">2</span>; i &lt; tmp-&gt;num; i++ )&#123;</span><br><span class="line">        tmp-&gt;Fibo[i] = tmp-&gt;Fibo[i<span class="number">-1</span>] + tmp-&gt;Fibo[i<span class="number">-2</span>]; </span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Data</span> <span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">pthread_t</span> th;<span class="comment">//线程标识符</span></span><br><span class="line">    <span class="keyword">int</span> ret; <span class="comment">//pthread的返回值 ret = 0,创建线程成功</span></span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"The fibonacci produce programe!\nPlease input an number within 1~200: "</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">0</span> || n &gt; <span class="number">200</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Your input is error."</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    data.num = n;<span class="comment">//赋值</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//create a thread</span></span><br><span class="line">    ret = pthread_create(&amp;th, <span class="literal">NULL</span>, Fibonacci, (<span class="keyword">void</span> *)&amp;data);</span><br><span class="line">    <span class="keyword">if</span>( ret != <span class="number">0</span> )&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Create thread error!\n"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//阻塞调用线程</span></span><br><span class="line">    pthread_join( th, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//输出斐波那契数列</span></span><br><span class="line">    <span class="keyword">if</span>( data.num == <span class="number">0</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Nothing output."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">	    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"The Fibonacci items are:  "</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>,data.Fibo[i]);</span><br><span class="line">	    &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://blog.csdn.net/qq_43721475/article/details/104834649" target="_blank" rel="noopener">OS Review Chapter 1: Introduction</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/104836492" target="_blank" rel="noopener">OS Review Chapter 2: Computer-System Structures</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/104846186" target="_blank" rel="noopener">OS Review Chapter 3: Operating-System Structures</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/105397752" target="_blank" rel="noopener">OS Review Chapter 4: Process</a><br><a href="https://blog.csdn.net/qq_43721475/article/details/105404697" target="_blank" rel="noopener">OS Review Chapter 5: Thread</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Java多线程</title>
     <url>/2020/03/22/Java%E5%A4%9A%E7%BA%BF%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>

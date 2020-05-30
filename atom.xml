@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="chenye2000.top/"/>
-  <updated>2020-04-09T03:21:05.640Z</updated>
+  <updated>2020-05-30T16:11:00.074Z</updated>
   <id>chenye2000.top/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Chapter 8  Memory Management</title>
+    <link href="chenye2000.top/2020/05/31/Chapter%208%20%20Memory%20Management/"/>
+    <id>chenye2000.top/2020/05/31/Chapter%208%20%20Memory%20Management/</id>
+    <published>2020-05-30T16:08:49.525Z</published>
+    <updated>2020-05-30T16:11:00.074Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Chapter-8-Memory-Management&quot;&gt;&lt;a href=&quot;#Chapter-8-Memory-Management&quot; class=&quot;headerlink&quot; title=&quot;Chapter 8:  Memory Management&quot;&gt;&lt;/a&gt;Chapter 8:  Memory Management&lt;/h1&gt;&lt;h2 id=&quot;Background&quot;&gt;&lt;a href=&quot;#Background&quot; class=&quot;headerlink&quot; title=&quot;Background&quot;&gt;&lt;/a&gt;Background&lt;/h2&gt;&lt;p&gt;Program must be brought into memory and placed within a process for it to be run&lt;/p&gt;
+&lt;h3 id=&quot;Base-and-Limit-Registers&quot;&gt;&lt;a href=&quot;#Base-and-Limit-Registers&quot; class=&quot;headerlink&quot; title=&quot;Base and Limit Registers&quot;&gt;&lt;/a&gt;Base and Limit Registers&lt;/h3&gt;&lt;p&gt;A pair of base and limit registers define the logical address space&lt;/p&gt;
+&lt;h3 id=&quot;Multi-step-Processing-of-a-User-Program&quot;&gt;&lt;a href=&quot;#Multi-step-Processing-of-a-User-Program&quot; class=&quot;headerlink&quot; title=&quot;Multi-step Processing of a User Program&quot;&gt;&lt;/a&gt;Multi-step Processing of a User Program&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/31/Chapter%208%20%20Memory%20Management/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1589504830233.png&quot; alt=&quot;1589504830233&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Binding-of-Instructions-and-Data-to-Memory&quot;&gt;&lt;a href=&quot;#Binding-of-Instructions-and-Data-to-Memory&quot; class=&quot;headerlink&quot; title=&quot;Binding of Instructions and Data to Memory&quot;&gt;&lt;/a&gt;Binding of Instructions and Data to Memory&lt;/h3&gt;&lt;p&gt;Address binding of instructions and data to memory addresses can happen at three different stages&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compile time&lt;/strong&gt;:  If memory location known a priori, absolute code can be generated; must recompile code if starting location changes. &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Load time:&lt;/strong&gt;  Must generate relocatable code if memory location is not known at compile time. &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Execution time&lt;/strong&gt;:  Binding delayed until run time if the process can be moved during its execution from one memory segment to another.  Need hardware support for address maps&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Chapter 5 Thread</title>

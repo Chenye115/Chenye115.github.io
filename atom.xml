@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="chenye2000.top/"/>
-  <updated>2020-05-30T16:11:00.074Z</updated>
+  <updated>2020-06-08T04:12:13.242Z</updated>
   <id>chenye2000.top/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Chapter 11 File System Implementation</title>
+    <link href="chenye2000.top/2020/06/08/Chapter%2011%20File%20System%20Implementation/"/>
+    <id>chenye2000.top/2020/06/08/Chapter%2011%20File%20System%20Implementation/</id>
+    <published>2020-06-08T04:10:14.242Z</published>
+    <updated>2020-06-08T04:12:13.242Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Chapter-11-File-System-Implementation&quot;&gt;&lt;a href=&quot;#Chapter-11-File-System-Implementation&quot; class=&quot;headerlink&quot; title=&quot;Chapter 11: File System Implementation&quot;&gt;&lt;/a&gt;Chapter 11: File System Implementation&lt;/h1&gt;&lt;h2 id=&quot;File-System-Structure&quot;&gt;&lt;a href=&quot;#File-System-Structure&quot; class=&quot;headerlink&quot; title=&quot;File-System Structure&quot;&gt;&lt;/a&gt;File-System Structure&lt;/h2&gt;&lt;p&gt;File control block–storage structure consisting of information about a file. 文件控制块放在硬盘上，内存中存放的有文件控制块所包含的内容，文件存放在硬盘，硬盘上的存储是非易失的。&lt;/p&gt;
+&lt;p&gt;File structure: Logical storage unit  Collection of related information &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Layered File System：&lt;/strong&gt;&lt;/p&gt;
+&lt;img src=&quot;/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591584216371.png&quot; alt=&quot;1591584216371&quot; style=&quot;zoom:50%;&quot;&gt;
+
+&lt;p&gt;应程程序进行系统调用：open read write… 执行IO语句&lt;/p&gt;
+&lt;p&gt;逻辑文件系统：目录 FCB 文件具体放在block（logic）上&lt;/p&gt;
+&lt;p&gt;文件组织模块：逻辑块映射到物理块 &lt;/p&gt;
+&lt;p&gt;基本文件系统：发出IO命令 磁盘地址&lt;/p&gt;
+&lt;p&gt;IO control：设备驱动&lt;/p&gt;
+&lt;p&gt;设备：以上都是软件层面，只有device是硬件  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;A Typical File Control Block&lt;/strong&gt;: file permission, file dates, file owner,group,ACL ,file size ,file date blocks 抓住了文件控制块就抓住了文件&lt;/p&gt;
+&lt;p&gt;on-disk information: &lt;/p&gt;
+&lt;p&gt;boot control block,volume control block(每分区一个)  directory structure(每个文件系统一个)&lt;/p&gt;
+&lt;p&gt;FCB i-node UFS (这些信息放在磁盘上，文件加载后有些信息会放在内存中)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;In-Memory File System Structures&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585104441.png&quot; alt=&quot;1591585104441&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585142146.png&quot; alt=&quot;1591585142146&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Chapter 8  Memory Management</title>

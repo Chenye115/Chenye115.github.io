@@ -70,6 +70,90 @@
     
     
     
+    <article id="post-Chapter 11 File System Implementation" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2020/06/08/Chapter%2011%20File%20System%20Implementation/"
+    >Chapter 11 File System Implementation</a
+  >
+</h2>
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/06/08/Chapter%2011%20File%20System%20Implementation/" class="article-date">
+  <time datetime="2020-06-08T04:10:14.242Z" itemprop="datePublished">2020-06-08</time>
+</a>
+      
+      
+      
+      
+    </div>
+    
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h1 id="Chapter-11-File-System-Implementation"><a href="#Chapter-11-File-System-Implementation" class="headerlink" title="Chapter 11: File System Implementation"></a>Chapter 11: File System Implementation</h1><h2 id="File-System-Structure"><a href="#File-System-Structure" class="headerlink" title="File-System Structure"></a>File-System Structure</h2><p>File control block–storage structure consisting of information about a file. 文件控制块放在硬盘上，内存中存放的有文件控制块所包含的内容，文件存放在硬盘，硬盘上的存储是非易失的。</p>
+<p>File structure: Logical storage unit  Collection of related information </p>
+<p><strong>Layered File System：</strong></p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591584216371.png" alt="1591584216371" style="zoom:50%;">
+
+<p>应程程序进行系统调用：open read write… 执行IO语句</p>
+<p>逻辑文件系统：目录 FCB 文件具体放在block（logic）上</p>
+<p>文件组织模块：逻辑块映射到物理块 </p>
+<p>基本文件系统：发出IO命令 磁盘地址</p>
+<p>IO control：设备驱动</p>
+<p>设备：以上都是软件层面，只有device是硬件  </p>
+<p><strong>A Typical File Control Block</strong>: file permission, file dates, file owner,group,ACL ,file size ,file date blocks 抓住了文件控制块就抓住了文件</p>
+<p>on-disk information: </p>
+<p>boot control block,volume control block(每分区一个)  directory structure(每个文件系统一个)</p>
+<p>FCB i-node UFS (这些信息放在磁盘上，文件加载后有些信息会放在内存中)</p>
+<p><strong>In-Memory File System Structures</strong>：</p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585104441.png" alt="1591585104441"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585142146.png" alt="1591585142146"></p>
+      
+      <a class="article-more-link" href="/2020/06/08/Chapter%2011%20File%20System%20Implementation/">阅读更多...</a>
+      
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+    <footer class="article-footer">
+      
+      
+
+    </footer>
+
+  </div>
+
+  
+
+  
+  
+  
+
+  
+
+</article>
+    
     <article id="post-Chapter 8  Memory Management" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 

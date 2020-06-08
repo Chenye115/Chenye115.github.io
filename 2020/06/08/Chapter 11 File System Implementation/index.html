@@ -6,7 +6,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    Chapter 8  Memory Management |  kali-chen&#39;s blogs
+    Chapter 11 File System Implementation |  kali-chen&#39;s blogs
   </title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   
@@ -31,7 +31,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-Chapter 8  Memory Management" class="article article-type-post" itemscope
+  <article id="post-Chapter 11 File System Implementation" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -39,7 +39,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Chapter 8  Memory Management
+  Chapter 11 File System Implementation
 </h1>
   
 
@@ -48,8 +48,8 @@
 
     
     <div class="article-meta">
-      <a href="/2020/05/31/Chapter%208%20%20Memory%20Management/" class="article-date">
-  <time datetime="2020-05-30T16:08:49.525Z" itemprop="datePublished">2020-05-31</time>
+      <a href="/2020/06/08/Chapter%2011%20File%20System%20Implementation/" class="article-date">
+  <time datetime="2020-06-08T04:10:14.242Z" itemprop="datePublished">2020-06-08</time>
 </a>
       
       
@@ -59,7 +59,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">754字</span>
+            <span class="post-count">775字</span>
         </span>
     </span>
 
@@ -93,100 +93,113 @@
       
 
       
-      <h1 id="Chapter-8-Memory-Management"><a href="#Chapter-8-Memory-Management" class="headerlink" title="Chapter 8:  Memory Management"></a>Chapter 8:  Memory Management</h1><h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>Program must be brought into memory and placed within a process for it to be run</p>
-<h3 id="Base-and-Limit-Registers"><a href="#Base-and-Limit-Registers" class="headerlink" title="Base and Limit Registers"></a>Base and Limit Registers</h3><p>A pair of base and limit registers define the logical address space</p>
-<h3 id="Multi-step-Processing-of-a-User-Program"><a href="#Multi-step-Processing-of-a-User-Program" class="headerlink" title="Multi-step Processing of a User Program"></a>Multi-step Processing of a User Program</h3><p><img src="/31/Chapter%208%20%20Memory%20Management/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1589504830233.png" alt="1589504830233"></p>
-<h3 id="Binding-of-Instructions-and-Data-to-Memory"><a href="#Binding-of-Instructions-and-Data-to-Memory" class="headerlink" title="Binding of Instructions and Data to Memory"></a>Binding of Instructions and Data to Memory</h3><p>Address binding of instructions and data to memory addresses can happen at three different stages</p>
-<p><strong>Compile time</strong>:  If memory location known a priori, absolute code can be generated; must recompile code if starting location changes. </p>
-<p><strong>Load time:</strong>  Must generate relocatable code if memory location is not known at compile time. </p>
-<p><strong>Execution time</strong>:  Binding delayed until run time if the process can be moved during its execution from one memory segment to another.  Need hardware support for address maps</p>
+      <h1 id="Chapter-11-File-System-Implementation"><a href="#Chapter-11-File-System-Implementation" class="headerlink" title="Chapter 11: File System Implementation"></a>Chapter 11: File System Implementation</h1><h2 id="File-System-Structure"><a href="#File-System-Structure" class="headerlink" title="File-System Structure"></a>File-System Structure</h2><p>File control block–storage structure consisting of information about a file. 文件控制块放在硬盘上，内存中存放的有文件控制块所包含的内容，文件存放在硬盘，硬盘上的存储是非易失的。</p>
+<p>File structure: Logical storage unit  Collection of related information </p>
+<p><strong>Layered File System：</strong></p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591584216371.png" alt="1591584216371" style="zoom:50%;">
+
+<p>应程程序进行系统调用：open read write… 执行IO语句</p>
+<p>逻辑文件系统：目录 FCB 文件具体放在block（logic）上</p>
+<p>文件组织模块：逻辑块映射到物理块 </p>
+<p>基本文件系统：发出IO命令 磁盘地址</p>
+<p>IO control：设备驱动</p>
+<p>设备：以上都是软件层面，只有device是硬件  </p>
+<p><strong>A Typical File Control Block</strong>: file permission, file dates, file owner,group,ACL ,file size ,file date blocks 抓住了文件控制块就抓住了文件</p>
+<p>on-disk information: </p>
+<p>boot control block,volume control block(每分区一个)  directory structure(每个文件系统一个)</p>
+<p>FCB i-node UFS (这些信息放在磁盘上，文件加载后有些信息会放在内存中)</p>
+<p><strong>In-Memory File System Structures</strong>：</p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585104441.png" alt="1591585104441"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585142146.png" alt="1591585142146"></p>
 <a id="more"></a>
 
-<h3 id="Logical-vs-Physical-Address-Space"><a href="#Logical-vs-Physical-Address-Space" class="headerlink" title="Logical vs. Physical Address Space"></a>Logical vs. Physical Address Space</h3><ul>
-<li><p>Logical address–generated by the CPU; also referred to as virtual address. </p>
-</li>
-<li><p>Physical address–address seen by the memory unit.</p>
-</li>
+<h2 id="Directory-Implementation"><a href="#Directory-Implementation" class="headerlink" title="Directory Implementation"></a>Directory Implementation</h2><ul>
+<li>Linear list of file names with pointer to the data blocks ：</li>
 </ul>
-<p>Logical and physical addresses are the same in compile-time and load-time address-binding schemes </p>
-<p>logical and physical addresses differ in execution time address-binding scheme</p>
-<p>In this case, logical address is also referred to as virtual address. (Logical = Virtual in this course) MMU内存管理单元来决定虚拟地址到物理地址的转换 <strong>Memory-Management Unit</strong> </p>
-<p>The user program deals with logical addresses; it never sees the real physical addresses.</p>
-<h3 id="Dynamic-Loading"><a href="#Dynamic-Loading" class="headerlink" title="Dynamic Loading"></a>Dynamic Loading</h3><p>Better memory-space utilization; unused routine is never loaded</p>
-<p>Useful when large amounts of code are needed to handle infrequently occurring cases</p>
-<h3 id="Dynamic-Linking"><a href="#Dynamic-Linking" class="headerlink" title="Dynamic Linking"></a>Dynamic Linking</h3><p>比动态load更进一步 Both Linking and loading postponed until execution time. </p>
-<p><strong>节省内存，灵活性</strong></p>
-<p>When a routine is called, its stub is executed. The routine is loaded, the address of that routine replaces the stub, and executes the routine</p>
-<p>Operating system needed to check <strong>if routine is in another process’ memory address</strong></p>
-<p>Dynamic linking is particularly useful for libraries</p>
-<h2 id="Swapping"><a href="#Swapping" class="headerlink" title="Swapping"></a>Swapping</h2><h2 id="Contiguous-Allocation"><a href="#Contiguous-Allocation" class="headerlink" title="Contiguous Allocation"></a>Contiguous Allocation</h2><p>如何分配给不同的进程使用 如何找到进程要访问的内存地址（寻址）</p>
-<p><strong>Monoprogramming systems</strong> ：</p>
+<p>simple to program </p>
+<p>time-consuming to execute</p>
 <ul>
-<li>系统</li>
-<li>用户</li>
+<li>Hash Table –linear list with hash data structure ：</li>
 </ul>
-<p><strong>Multiprogramming systems：</strong></p>
+<p>decreases directory search time </p>
+<p>collisions –situations where two file names hash to the same location</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591585420213.png" alt="1591585420213" style="zoom:67%;">
+
+<h2 id="Allocation-Methods"><a href="#Allocation-Methods" class="headerlink" title="Allocation Methods"></a>Allocation Methods</h2><h3 id="Contiguous-Allocation"><a href="#Contiguous-Allocation" class="headerlink" title="Contiguous Allocation"></a>Contiguous Allocation</h3><ul>
+<li>Each file occupies a set of contiguous blocks on the disk.</li>
+<li>Simple –only starting location (block #) and length (number of blocks) are required.</li>
+<li>Random access.</li>
+<li>Wasteful of space 外部碎片</li>
+<li>Files cannot grow</li>
+</ul>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591585602845.png" alt="1591585602845" style="zoom:50%;">
+
+<h3 id="Extent-Based-Systems"><a href="#Extent-Based-Systems" class="headerlink" title="Extent-Based Systems"></a>Extent-Based Systems</h3><p>Extent-based file systems allocate disk blocks in <strong>extents.</strong> </p>
+<p>An extent is a contiguous block of disks. Extents are allocated for file allocation. A file consists of one or more extents。 类似于存储管理中的分段segement</p>
+<h3 id="Linked-Allocation"><a href="#Linked-Allocation" class="headerlink" title="Linked Allocation"></a>Linked Allocation</h3><p>Each file is a linked list of disk blocks: blocks may be scattered anywhere on the disk.</p>
 <ul>
-<li>Fixed partitions </li>
-<li>variable partitions</li>
+<li>Simple –need only starting address </li>
+<li>Free-space management system –no waste of space </li>
+<li>Files can grow </li>
+<li>No random access </li>
+<li>Each block contains a pointer, wasting space </li>
+<li>Blocks scatter everywhere and a large number of disk seeks may be necessary </li>
+<li>Reliability: what if a pointer is lost or damaged 不安全不可靠</li>
 </ul>
-<p><strong>Fixed partitions</strong>：</p>
-<p>Memory is divided into n partitions. Partitioning can be done at the startup time and altered later on. <strong>Each partition may have a job queue. Or, all partitions share the same job queue</strong></p>
-<p><img src="/31/Chapter%208%20%20Memory%20Management/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1589508667796.png" alt="1589508667796"></p>
-<p><strong>Variable Partitions ：</strong></p>
-<p><strong><em>Hole</em></strong>–block of available memory–&gt;How to satisfy a request of size n from a list of free holes</p>
+<h3 id="File-Allocation-Table-FAT"><a href="#File-Allocation-Table-FAT" class="headerlink" title="File-Allocation Table FAT"></a>File-Allocation Table FAT</h3><p>FAT表在磁盘的最开始</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586295483.png" alt="1591586295483" style="zoom:50%;">
+
+<p>实现了随机访问，更加安全可靠</p>
+<h3 id="Indexed-Allocation"><a href="#Indexed-Allocation" class="headerlink" title="Indexed Allocation"></a>Indexed Allocation</h3><p>Brings all pointers together into the index block</p>
+<p>A file’s directory entry contains a pointer to its index. Hence, the index block of an indexed allocation plays the same role as the page table.</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586502853.png" alt="1591586502853" style="zoom:50%;">
+
 <ul>
-<li>First-fit(首次适配)</li>
-<li>Best-fit(最佳适配)</li>
-<li>Worst-fit(最差适配)</li>
+<li>*<em>Random access *</em></li>
+<li>无外部碎片</li>
+<li>不是安全可靠的</li>
+<li>文件的grow是有限的</li>
 </ul>
-<h4 id="Fragmentation-碎片"><a href="#Fragmentation-碎片" class="headerlink" title="Fragmentation(碎片)"></a>Fragmentation(碎片)</h4><p>Free memory holes between allocated ones are called <strong>external fragmentation</strong>外部碎片</p>
-<p> memory that is allocated to a partition, but is not used, are called <strong>internal fragmentation</strong>内部碎片</p>
-<p>外部碎片不可避免</p>
-<h4 id="Compaction-for-External-Fragmentation"><a href="#Compaction-for-External-Fragmentation" class="headerlink" title="Compaction for External Fragmentation"></a>Compaction for External Fragmentation</h4><p>Compaction is possible <strong>only</strong> if relocation is dynamic, and is done at execution time</p>
-<p>compaction scheme can be expensive</p>
-<p><img src="/31/Chapter%208%20%20Memory%20Management/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1589510716937.png" alt="1589510716937"></p>
-<p>AC 连续分配容易通过base和limit寄存器实现内存保护</p>
-<h2 id="Paging"><a href="#Paging" class="headerlink" title="Paging"></a>Paging</h2><p>不连续分配的一种方法</p>
-<p> Divide physical memory into fixed-sized blocks called <strong>frames(帧)</strong></p>
-<p> Divide logical memory into blocks of same size called <strong>pages(页)</strong></p>
+<p>The indexed allocation suffers from wasted space. The index block may not be fully used </p>
+<p>The number of entries of an index table determines the size of a file. To overcome this problem, we can have ：</p>
 <ul>
-<li>Keep track of all free frames. </li>
-<li>To run a program of size n pages, need to find n free frames and load program. </li>
-<li>Set up a page table to translate logical to physical addresses. </li>
-<li>Internal fragmentation.</li>
+<li>multiple index blocks, chain them into a linked-list </li>
+<li>multiple index blocks, but make them a tree just like the indexed access method </li>
+<li>A combination of both</li>
 </ul>
-<p>平均Internal fragmentation的大小是半个frame/page</p>
-<h3 id="Address-Translation-Scheme"><a href="#Address-Translation-Scheme" class="headerlink" title="Address Translation Scheme"></a>Address Translation Scheme</h3><p>Address generated by CPU is divided into:</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586700043.png" alt="1591586700043" style="zoom:50%;">
+
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591587524372.png" alt="1591587524372"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591587687829.png" alt="1591587687829"></p>
+<p>4 128 84+2^16</p>
+<h2 id="Free-Space-Management"><a href="#Free-Space-Management" class="headerlink" title="Free-Space Management"></a>Free-Space Management</h2><p>How do we keep track free blocks on a disk?  A free-list is maintained(维护).</p>
+<p>When a new block is requested, we search this list to find one. </p>
 <ul>
-<li>Page number(p)</li>
-<li>Page offset (d)</li>
+<li>Bit Vector </li>
+<li>Linked List </li>
+<li>Linked List + Grouping </li>
+<li>Linked List+Address+Count</li>
 </ul>
-<p><img src="/31/Chapter%208%20%20Memory%20Management/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1589510062828.png" alt="1589510062828"></p>
-<p>logical–&gt; pages</p>
-<p>physical–&gt;frames</p>
-<h3 id="Implementation-of-Page-Table"><a href="#Implementation-of-Page-Table" class="headerlink" title="Implementation of Page Table"></a>Implementation of Page Table</h3><ul>
-<li>Page table is kept in main memory.</li>
-<li><strong>Page-table base register (PTBR)</strong>points to the page table</li>
-</ul>
-<p>TLB 快表: Hit ratio = α</p>
-<p>Effective Access Time (EAT)</p>
-<p>​     EAT = (1 + ε) α+ (2 + ε）(1 –α) = 2 + ε- α</p>
-<h4 id="Memory-Protection"><a href="#Memory-Protection" class="headerlink" title="Memory Protection"></a>Memory Protection</h4><p>Memory protection implemented by associating protection bit with each frame</p>
-<p><strong>Valid-invalid bit</strong>:</p>
+<p><strong>Linked Free Space List on Disk</strong>:</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591588592801.png" alt="1591588592801" style="zoom:50%;">
+
+<p><strong>Link+Grouping:</strong></p>
+<p>The first free block contains the addresses of n other free blocks. </p>
+<p>For each group, the first n-1 blocks are actually free and the last (i.e., n-th) block contains the addresses of the next group. </p>
+<p><strong>Link+Address counting:</strong></p>
+<p>Blocks are often allocated and freed in groups</p>
+<p>We can store the address of the first free block and the number of the following n free blocks.</p>
+<h2 id="Efficiency-and-Performance"><a href="#Efficiency-and-Performance" class="headerlink" title="Efficiency and Performance"></a>Efficiency and Performance</h2><p>Efficiency dependent on: </p>
 <ul>
-<li><p><strong>valid</strong></p>
-</li>
-<li><p><strong>invalid</strong>: the page is not in the process’ logical address space</p>
-<p>we can use a <strong>page table length register (PTLR)</strong> that stores the length of a process’s page table.–&gt;a process cannot access the memory beyond its region</p>
-</li>
+<li>disk allocation and directory algorithms </li>
+<li>types of data kept in file’s directory entry </li>
 </ul>
-<h3 id="Page-Table-Structure"><a href="#Page-Table-Structure" class="headerlink" title="Page Table Structure"></a>Page Table Structure</h3><p>Hierarchical Page Tables 分级页表：</p>
-<p>Break up the logical address space into multiple page tables</p>
-<p><img src="/31/Chapter%208%20%20Memory%20Management/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1589514600311.png" alt="1589514600311"></p>
-<p><strong><em>Answer： 8 7 9</em></strong></p>
-<p>Hashed Page Tables</p>
-<p>Inverted Page Table</p>
+<p>Performance:</p>
+<ul>
+<li>disk cache </li>
+<li>free-behind and read-ahead  延后释放，提前读取</li>
+<li>improve PC performance by dedicating section of memory as virtual disk, or RAM disk 提升硬件性能</li>
+</ul>
 
       
       <!-- reward -->
@@ -256,7 +269,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http:chenye2000.top/2020/05/31/Chapter%208%20%20Memory%20Management/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http:chenye2000.top/2020/06/08/Chapter%2011%20File%20System%20Implementation/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -272,19 +285,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/06/08/Chapter%2011%20File%20System%20Implementation/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            Chapter 11 File System Implementation
-          
-        </div>
-      </a>
     
-    
-      <a href="/2020/04/09/Chapter%205%20Thread/" class="article-nav-link">
+      <a href="/2020/05/31/Chapter%208%20%20Memory%20Management/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Chapter 5 Thread</div>
+        <div class="article-nav-title">Chapter 8  Memory Management</div>
       </a>
     
   </nav>

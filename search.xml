@@ -1,6 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Chapter 11 File System Implementation</title>
+    <url>/2020/06/08/Chapter%2011%20File%20System%20Implementation/</url>
+    <content><![CDATA[<h1 id="Chapter-11-File-System-Implementation"><a href="#Chapter-11-File-System-Implementation" class="headerlink" title="Chapter 11: File System Implementation"></a>Chapter 11: File System Implementation</h1><h2 id="File-System-Structure"><a href="#File-System-Structure" class="headerlink" title="File-System Structure"></a>File-System Structure</h2><p>File control block–storage structure consisting of information about a file. 文件控制块放在硬盘上，内存中存放的有文件控制块所包含的内容，文件存放在硬盘，硬盘上的存储是非易失的。</p>
+<p>File structure: Logical storage unit  Collection of related information </p>
+<p><strong>Layered File System：</strong></p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591584216371.png" alt="1591584216371" style="zoom:50%;">
+
+<p>应程程序进行系统调用：open read write… 执行IO语句</p>
+<p>逻辑文件系统：目录 FCB 文件具体放在block（logic）上</p>
+<p>文件组织模块：逻辑块映射到物理块 </p>
+<p>基本文件系统：发出IO命令 磁盘地址</p>
+<p>IO control：设备驱动</p>
+<p>设备：以上都是软件层面，只有device是硬件  </p>
+<p><strong>A Typical File Control Block</strong>: file permission, file dates, file owner,group,ACL ,file size ,file date blocks 抓住了文件控制块就抓住了文件</p>
+<p>on-disk information: </p>
+<p>boot control block,volume control block(每分区一个)  directory structure(每个文件系统一个)</p>
+<p>FCB i-node UFS (这些信息放在磁盘上，文件加载后有些信息会放在内存中)</p>
+<p><strong>In-Memory File System Structures</strong>：</p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585104441.png" alt="1591585104441"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585142146.png" alt="1591585142146"></p>
+<a id="more"></a>
+
+<h2 id="Directory-Implementation"><a href="#Directory-Implementation" class="headerlink" title="Directory Implementation"></a>Directory Implementation</h2><ul>
+<li>Linear list of file names with pointer to the data blocks ：</li>
+</ul>
+<p>simple to program </p>
+<p>time-consuming to execute</p>
+<ul>
+<li>Hash Table –linear list with hash data structure ：</li>
+</ul>
+<p>decreases directory search time </p>
+<p>collisions –situations where two file names hash to the same location</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591585420213.png" alt="1591585420213" style="zoom:67%;">
+
+<h2 id="Allocation-Methods"><a href="#Allocation-Methods" class="headerlink" title="Allocation Methods"></a>Allocation Methods</h2><h3 id="Contiguous-Allocation"><a href="#Contiguous-Allocation" class="headerlink" title="Contiguous Allocation"></a>Contiguous Allocation</h3><ul>
+<li>Each file occupies a set of contiguous blocks on the disk.</li>
+<li>Simple –only starting location (block #) and length (number of blocks) are required.</li>
+<li>Random access.</li>
+<li>Wasteful of space 外部碎片</li>
+<li>Files cannot grow</li>
+</ul>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591585602845.png" alt="1591585602845" style="zoom:50%;">
+
+<h3 id="Extent-Based-Systems"><a href="#Extent-Based-Systems" class="headerlink" title="Extent-Based Systems"></a>Extent-Based Systems</h3><p>Extent-based file systems allocate disk blocks in <strong>extents.</strong> </p>
+<p>An extent is a contiguous block of disks. Extents are allocated for file allocation. A file consists of one or more extents。 类似于存储管理中的分段segement</p>
+<h3 id="Linked-Allocation"><a href="#Linked-Allocation" class="headerlink" title="Linked Allocation"></a>Linked Allocation</h3><p>Each file is a linked list of disk blocks: blocks may be scattered anywhere on the disk.</p>
+<ul>
+<li>Simple –need only starting address </li>
+<li>Free-space management system –no waste of space </li>
+<li>Files can grow </li>
+<li>No random access </li>
+<li>Each block contains a pointer, wasting space </li>
+<li>Blocks scatter everywhere and a large number of disk seeks may be necessary </li>
+<li>Reliability: what if a pointer is lost or damaged 不安全不可靠</li>
+</ul>
+<h3 id="File-Allocation-Table-FAT"><a href="#File-Allocation-Table-FAT" class="headerlink" title="File-Allocation Table FAT"></a>File-Allocation Table FAT</h3><p>FAT表在磁盘的最开始</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586295483.png" alt="1591586295483" style="zoom:50%;">
+
+<p>实现了随机访问，更加安全可靠</p>
+<h3 id="Indexed-Allocation"><a href="#Indexed-Allocation" class="headerlink" title="Indexed Allocation"></a>Indexed Allocation</h3><p>Brings all pointers together into the index block</p>
+<p>A file’s directory entry contains a pointer to its index. Hence, the index block of an indexed allocation plays the same role as the page table.</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586502853.png" alt="1591586502853" style="zoom:50%;">
+
+<ul>
+<li>*<em>Random access *</em></li>
+<li>无外部碎片</li>
+<li>不是安全可靠的</li>
+<li>文件的grow是有限的</li>
+</ul>
+<p>The indexed allocation suffers from wasted space. The index block may not be fully used </p>
+<p>The number of entries of an index table determines the size of a file. To overcome this problem, we can have ：</p>
+<ul>
+<li>multiple index blocks, chain them into a linked-list </li>
+<li>multiple index blocks, but make them a tree just like the indexed access method </li>
+<li>A combination of both</li>
+</ul>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586700043.png" alt="1591586700043" style="zoom:50%;">
+
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591587524372.png" alt="1591587524372"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591587687829.png" alt="1591587687829"></p>
+<p>4 128 84+2^16</p>
+<h2 id="Free-Space-Management"><a href="#Free-Space-Management" class="headerlink" title="Free-Space Management"></a>Free-Space Management</h2><p>How do we keep track free blocks on a disk?  A free-list is maintained(维护).</p>
+<p>When a new block is requested, we search this list to find one. </p>
+<ul>
+<li>Bit Vector </li>
+<li>Linked List </li>
+<li>Linked List + Grouping </li>
+<li>Linked List+Address+Count</li>
+</ul>
+<p><strong>Linked Free Space List on Disk</strong>:</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591588592801.png" alt="1591588592801" style="zoom:50%;">
+
+<p><strong>Link+Grouping:</strong></p>
+<p>The first free block contains the addresses of n other free blocks. </p>
+<p>For each group, the first n-1 blocks are actually free and the last (i.e., n-th) block contains the addresses of the next group. </p>
+<p><strong>Link+Address counting:</strong></p>
+<p>Blocks are often allocated and freed in groups</p>
+<p>We can store the address of the first free block and the number of the following n free blocks.</p>
+<h2 id="Efficiency-and-Performance"><a href="#Efficiency-and-Performance" class="headerlink" title="Efficiency and Performance"></a>Efficiency and Performance</h2><p>Efficiency dependent on: </p>
+<ul>
+<li>disk allocation and directory algorithms </li>
+<li>types of data kept in file’s directory entry </li>
+</ul>
+<p>Performance:</p>
+<ul>
+<li>disk cache </li>
+<li>free-behind and read-ahead  延后释放，提前读取</li>
+<li>improve PC performance by dedicating section of memory as virtual disk, or RAM disk 提升硬件性能</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
     <title>Chapter 8  Memory Management</title>
     <url>/2020/05/31/Chapter%208%20%20Memory%20Management/</url>
     <content><![CDATA[<h1 id="Chapter-8-Memory-Management"><a href="#Chapter-8-Memory-Management" class="headerlink" title="Chapter 8:  Memory Management"></a>Chapter 8:  Memory Management</h1><h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>Program must be brought into memory and placed within a process for it to be run</p>

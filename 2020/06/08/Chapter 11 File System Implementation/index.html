@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    Chapter 11 File System Implementation |  Chenye&#39;s blogs
+  </title>
+  <meta name="generator" content="hexo-theme-yilia-plus">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Chenye's blogs" type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content">
+      <section class="outer">
+  <article id="post-Chapter 11 File System Implementation" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  Chapter 11 File System Implementation
+</h1>
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/06/08/Chapter%2011%20File%20System%20Implementation/" class="article-date">
+  <time datetime="2020-06-08T04:10:14.242Z" itemprop="datePublished">2020-06-08</time>
+</a>
+      
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">775字</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">4分钟</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h1 id="Chapter-11-File-System-Implementation"><a href="#Chapter-11-File-System-Implementation" class="headerlink" title="Chapter 11: File System Implementation"></a>Chapter 11: File System Implementation</h1><h2 id="File-System-Structure"><a href="#File-System-Structure" class="headerlink" title="File-System Structure"></a>File-System Structure</h2><p>File control block–storage structure consisting of information about a file. 文件控制块放在硬盘上，内存中存放的有文件控制块所包含的内容，文件存放在硬盘，硬盘上的存储是非易失的。</p>
+<p>File structure: Logical storage unit  Collection of related information </p>
+<p><strong>Layered File System：</strong></p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591584216371.png" alt="1591584216371" style="zoom:50%;">
+
+<p>应程程序进行系统调用：open read write… 执行IO语句</p>
+<p>逻辑文件系统：目录 FCB 文件具体放在block（logic）上</p>
+<p>文件组织模块：逻辑块映射到物理块 </p>
+<p>基本文件系统：发出IO命令 磁盘地址</p>
+<p>IO control：设备驱动</p>
+<p>设备：以上都是软件层面，只有device是硬件  </p>
+<p><strong>A Typical File Control Block</strong>: file permission, file dates, file owner,group,ACL ,file size ,file date blocks 抓住了文件控制块就抓住了文件</p>
+<p>on-disk information: </p>
+<p>boot control block,volume control block(每分区一个)  directory structure(每个文件系统一个)</p>
+<p>FCB i-node UFS (这些信息放在磁盘上，文件加载后有些信息会放在内存中)</p>
+<p><strong>In-Memory File System Structures</strong>：</p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585104441.png" alt="1591585104441"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591585142146.png" alt="1591585142146"></p>
+<a id="more"></a>
+
+<h2 id="Directory-Implementation"><a href="#Directory-Implementation" class="headerlink" title="Directory Implementation"></a>Directory Implementation</h2><ul>
+<li>Linear list of file names with pointer to the data blocks ：</li>
+</ul>
+<p>simple to program </p>
+<p>time-consuming to execute</p>
+<ul>
+<li>Hash Table –linear list with hash data structure ：</li>
+</ul>
+<p>decreases directory search time </p>
+<p>collisions –situations where two file names hash to the same location</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591585420213.png" alt="1591585420213" style="zoom:67%;">
+
+<h2 id="Allocation-Methods"><a href="#Allocation-Methods" class="headerlink" title="Allocation Methods"></a>Allocation Methods</h2><h3 id="Contiguous-Allocation"><a href="#Contiguous-Allocation" class="headerlink" title="Contiguous Allocation"></a>Contiguous Allocation</h3><ul>
+<li>Each file occupies a set of contiguous blocks on the disk.</li>
+<li>Simple –only starting location (block #) and length (number of blocks) are required.</li>
+<li>Random access.</li>
+<li>Wasteful of space 外部碎片</li>
+<li>Files cannot grow</li>
+</ul>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591585602845.png" alt="1591585602845" style="zoom:50%;">
+
+<h3 id="Extent-Based-Systems"><a href="#Extent-Based-Systems" class="headerlink" title="Extent-Based Systems"></a>Extent-Based Systems</h3><p>Extent-based file systems allocate disk blocks in <strong>extents.</strong> </p>
+<p>An extent is a contiguous block of disks. Extents are allocated for file allocation. A file consists of one or more extents。 类似于存储管理中的分段segement</p>
+<h3 id="Linked-Allocation"><a href="#Linked-Allocation" class="headerlink" title="Linked Allocation"></a>Linked Allocation</h3><p>Each file is a linked list of disk blocks: blocks may be scattered anywhere on the disk.</p>
+<ul>
+<li>Simple –need only starting address </li>
+<li>Free-space management system –no waste of space </li>
+<li>Files can grow </li>
+<li>No random access </li>
+<li>Each block contains a pointer, wasting space </li>
+<li>Blocks scatter everywhere and a large number of disk seeks may be necessary </li>
+<li>Reliability: what if a pointer is lost or damaged 不安全不可靠</li>
+</ul>
+<h3 id="File-Allocation-Table-FAT"><a href="#File-Allocation-Table-FAT" class="headerlink" title="File-Allocation Table FAT"></a>File-Allocation Table FAT</h3><p>FAT表在磁盘的最开始</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586295483.png" alt="1591586295483" style="zoom:50%;">
+
+<p>实现了随机访问，更加安全可靠</p>
+<h3 id="Indexed-Allocation"><a href="#Indexed-Allocation" class="headerlink" title="Indexed Allocation"></a>Indexed Allocation</h3><p>Brings all pointers together into the index block</p>
+<p>A file’s directory entry contains a pointer to its index. Hence, the index block of an indexed allocation plays the same role as the page table.</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586502853.png" alt="1591586502853" style="zoom:50%;">
+
+<ul>
+<li>*<em>Random access *</em></li>
+<li>无外部碎片</li>
+<li>不是安全可靠的</li>
+<li>文件的grow是有限的</li>
+</ul>
+<p>The indexed allocation suffers from wasted space. The index block may not be fully used </p>
+<p>The number of entries of an index table determines the size of a file. To overcome this problem, we can have ：</p>
+<ul>
+<li>multiple index blocks, chain them into a linked-list </li>
+<li>multiple index blocks, but make them a tree just like the indexed access method </li>
+<li>A combination of both</li>
+</ul>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591586700043.png" alt="1591586700043" style="zoom:50%;">
+
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591587524372.png" alt="1591587524372"></p>
+<p><img src="/08/Chapter%2011%20File%20System%20Implementation/C:%5CUsers%5Ckali_chenye%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1591587687829.png" alt="1591587687829"></p>
+<p>4 128 84+2^16</p>
+<h2 id="Free-Space-Management"><a href="#Free-Space-Management" class="headerlink" title="Free-Space Management"></a>Free-Space Management</h2><p>How do we keep track free blocks on a disk?  A free-list is maintained(维护).</p>
+<p>When a new block is requested, we search this list to find one. </p>
+<ul>
+<li>Bit Vector </li>
+<li>Linked List </li>
+<li>Linked List + Grouping </li>
+<li>Linked List+Address+Count</li>
+</ul>
+<p><strong>Linked Free Space List on Disk</strong>:</p>
+<img src="/08/Chapter%2011%20File%20System%20Implementation/Users\kali_chenye\AppData\Roaming\Typora\typora-user-images\1591588592801.png" alt="1591588592801" style="zoom:50%;">
+
+<p><strong>Link+Grouping:</strong></p>
+<p>The first free block contains the addresses of n other free blocks. </p>
+<p>For each group, the first n-1 blocks are actually free and the last (i.e., n-th) block contains the addresses of the next group. </p>
+<p><strong>Link+Address counting:</strong></p>
+<p>Blocks are often allocated and freed in groups</p>
+<p>We can store the address of the first free block and the number of the following n free blocks.</p>
+<h2 id="Efficiency-and-Performance"><a href="#Efficiency-and-Performance" class="headerlink" title="Efficiency and Performance"></a>Efficiency and Performance</h2><p>Efficiency dependent on: </p>
+<ul>
+<li>disk allocation and directory algorithms </li>
+<li>types of data kept in file’s directory entry </li>
+</ul>
+<p>Performance:</p>
+<ul>
+<li>disk cache </li>
+<li>free-behind and read-ahead  延后释放，提前读取</li>
+<li>improve PC performance by dedicating section of memory as virtual disk, or RAM disk 提升硬件性能</li>
+</ul>
+
+      
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        打赏
+      </div>
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+        <div class="declare">
+          <ul class="post-copyright">
+            <li>
+              <i class="ri-copyright-line"></i>
+              <strong>版权声明： </strong s>
+              本博客所有文章除特别声明外，均采用 <a href="https://www.apache.org/licenses/LICENSE-2.0.html" rel="external nofollow"
+                target="_blank">Apache License 2.0</a> 许可协议。转载请注明出处！
+            </li>
+          </ul>
+        </div>
+        
+    <footer class="article-footer">
+      
+          
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http:chenye2000.top/2020/06/08/Chapter%2011%20File%20System%20Implementation/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>
+      
+      
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/2020/08/06/%E5%B0%8F%E8%AF%B4/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            小说
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/05/31/Chapter%208%20%20Memory%20Management/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Chapter 8  Memory Management</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+<!-- valine评论 -->
+<div id="vcomments-box">
+    <div id="vcomments">
+    </div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        app_id: '',
+        app_key: '',
+        path: window.location.pathname,
+        notify: 'false',
+        verify: 'false',
+        avatar: 'mp',
+        placeholder: '给我的文章加点评论吧~',
+        recordIP: true
+    });
+    const infoEle = document.querySelector('#vcomments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+        infoEle.childNodes.forEach(function (item) {
+            item.parentNode.removeChild(item);
+        });
+    }
+</script>
+<style>
+    #vcomments-box {
+        padding: 5px 30px;
+    }
+
+    @media screen and (max-width: 800px) {
+        #vcomments-box {
+            padding: 5px 0px;
+        }
+    }
+
+    #vcomments-box #vcomments {
+        background-color: #fff;
+    }
+
+    .v .vlist .vcard .vh {
+        padding-right: 20px;
+    }
+
+    .v .vlist .vcard {
+        padding-left: 10px;
+    }
+</style>
+
+  
+
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+<script type="text/javascript" src="/js/click-love.js"></script>
+  <div class="outer">
+  
+    <ul class="list-inline">
+      <li>
+        &copy;
+        2020
+        陈烨
+      </li>
+      <li>
+        
+        Powered by
+        
+        
+        <a href="https://hexo.io" target="_blank">Hexo</a> Theme <a href="https://github.com/Shen-Yu/hexo-theme-ayer" target="_blank">Ayer</a>
+        
+      </li>
+    </ul>
+    <ul class="list-inline">
+      <li>
+        
+        
+        <span>
+  <i>PV:<span id="busuanzi_value_page_pv"></span></i>
+  <i>UV:<span id="busuanzi_value_site_uv"></span></i>
+</span>
+        
+      </li>
+      
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="to_top">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+      </div>
+    </main>
+    <aside class="sidebar">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer.svg" alt="Chenye&#39;s blogs"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="https://user.qzone.qq.com/2230015744" target="_blank" rel="noopener">Qzone</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="https://me.csdn.net/qq_43721475" target="_blank" rel="noopener">CSDN</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/aboutme">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>小陈在此感谢~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay2.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.png">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/share.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '等风来，不如追风去', '城市慷慨亮整夜光,如同少年不惧岁月长'],
+      startDelay: 2,
+      typeSpeed: 180,
+      loop: true,
+      backSpeed: 100,
+      showCursor: true
+    });
+  } catch (err) {
+  }
+
+</script>
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+    onClick: (e) => {
+      $('.toc-link').removeClass('is-active-link');
+      $(`a[href=${e.target.hash}]`).addClass('is-active-link');
+      $(e.target.hash).scrollIntoView();
+      return false;
+    }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/js/ayer.js"></script>
+
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://js.users.51.la/20544303.js"></script>
+
+    
+    <div id="music">
+    
+    
+    
+    <iframe frameborder="no" border="1" marginwidth="0" marginheight="0" width="200" height="52"
+        src="//music.163.com/outchain/player?type=2&id=22707008&auto=1&height=32"></iframe>
+</div>
+
+<style>
+    #music {
+        position: fixed;
+        right: 15px;
+        bottom: 0;
+        z-index: 998;
+    }
+</style>
+    
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/assets/miku.model.json"},"display":{"superSample":4,"width":300,"height":600,"position":"right","hOffset":0,"vOffset":20},"mobile":{"show":true,"scale":1},"react":{"opacityDefault":1.4,"opacityOnHover":0.4},"log":false,"pluginJsPath":"lib/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>

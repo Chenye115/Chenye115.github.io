@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="chenye2000.top/"/>
-  <updated>2020-08-06T04:36:12.233Z</updated>
+  <updated>2020-12-26T11:30:22.244Z</updated>
   <id>chenye2000.top/</id>
   
   <author>
@@ -15,6 +15,68 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>汇编</title>
+    <link href="chenye2000.top/2020/12/26/%E6%B1%87%E7%BC%96/"/>
+    <id>chenye2000.top/2020/12/26/%E6%B1%87%E7%BC%96/</id>
+    <published>2020-12-26T11:28:35.792Z</published>
+    <updated>2020-12-26T11:30:22.244Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;汇编&quot;&gt;&lt;a href=&quot;#汇编&quot; class=&quot;headerlink&quot; title=&quot;汇编&quot;&gt;&lt;/a&gt;汇编&lt;/h3&gt;&lt;p&gt;MASM 汇编器 链接器&lt;/p&gt;
+&lt;p&gt; 32 位保护模式   64 位模式   16 位实地址模式 &lt;/p&gt;
+&lt;p&gt; 所有 x86 处理器都理解共同的机器语言 &lt;/p&gt;
+&lt;p&gt; 汇编语言不是可移植的，因为它是为特定处理器系列设计的   每一种都基于一个处理器系列 &lt;/p&gt;
+&lt;p&gt; 由于汇编语言占用内存少，因此它是编写嵌入式程序的理想工具&lt;/p&gt;
+&lt;p&gt; 汇编语言可以用于优化应用程序的部分代码来提升速度，或用于访问计算机硬件 &lt;/p&gt;
+&lt;p&gt; 计算机使用的是字符集，将字符映射为整数 , 在字符模式（如 MS-DOS）下运行时，IBM 兼容微机使用的还是 ASCII（读为“askey”）字符集 .&lt;/p&gt;
+&lt;p&gt; ANSI   Unicode  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;UTF-8 用于 HTML，与 ASCII 有相同的字节数值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;UTF-16 用于节约使用内存与高效访问字符相互平衡的环境中。比如，Microsoft Windows 近期版本使用了 UTF-16，其中的每个字符都有一个 16 位的编码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;UTF-32 用于不考虑空间，但需要固定宽度字符的环境中。每个字符都有一个 32 位的编码。&lt;/p&gt;
+&lt;p&gt;32 位 x86 处理器  包括了 Intel IA-32 系列中的成员和所有 32 位 AMD 处理器 &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;==x86 处理器==&lt;/p&gt;
+&lt;p&gt;有三个主要的操作模式：保护模式、实地址模式和系统管理模式；以及一个子模式：虚拟 8086 (virtual-8086) 模式，这是保护模式的特殊情况。 &lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>现有的DoS防御技术整理</title>
+    <link href="chenye2000.top/2020/12/26/%E7%8E%B0%E6%9C%89%E7%9A%84DoS%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/"/>
+    <id>chenye2000.top/2020/12/26/%E7%8E%B0%E6%9C%89%E7%9A%84DoS%E9%98%B2%E5%BE%A1%E6%8A%80%E6%9C%AF%E6%95%B4%E7%90%86/</id>
+    <published>2020-12-26T11:28:09.079Z</published>
+    <updated>2020-12-26T11:29:49.016Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;现有的DoS-DDoS-防御技术整理&quot;&gt;&lt;a href=&quot;#现有的DoS-DDoS-防御技术整理&quot; class=&quot;headerlink&quot; title=&quot;现有的DoS(DDoS)防御技术整理&quot;&gt;&lt;/a&gt;现有的DoS(DDoS)防御技术整理&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;mailto:chenye0920@qq.com&quot;&gt;chenye0920@qq.com&lt;/a&gt; 2020年12月23日&lt;/p&gt;
+&lt;h4 id=&quot;DoS产生的主要原因：&quot;&gt;&lt;a href=&quot;#DoS产生的主要原因：&quot; class=&quot;headerlink&quot; title=&quot;DoS产生的主要原因：&quot;&gt;&lt;/a&gt;DoS产生的主要原因：&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;系统存在耗资源的操作，包括内存和 CPU 以及带宽&lt;/li&gt;
+&lt;li&gt;使用共享资源的操作 ，容易导致死锁&lt;/li&gt;
+&lt;li&gt;缓冲区溢出  &lt;/li&gt;
+&lt;li&gt;内存泄漏&lt;/li&gt;
+&lt;li&gt;不正确的缓存机制 &lt;/li&gt;
+&lt;li&gt;服务使用的工具或者系统的配置不当 &lt;/li&gt;
+&lt;li&gt;存在注入问题，如 SQL 注入 ，命令行注入等&lt;/li&gt;
+&lt;li&gt;协议级别的攻击：SYN flood，ICMP攻击， 这些攻击都有一些特征，可以通过防火墙定制规则过滤这些包，  升级使用最新版的协议 &lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>小说</title>
